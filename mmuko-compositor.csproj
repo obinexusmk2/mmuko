@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>mmuko-compositor</AssemblyName>
+    <RootNamespace>OBINexus.MMUKO</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!-- LTE: Linkable Then Executable — do not auto-run on build -->
+    <RunAfterPublish>false</RunAfterPublish>
+    <Version>0.1.0-DRAFT</Version>
+    <Authors>Nnamdi Michael Okpala</Authors>
+    <Company>OBINexus Computing</Company>
+    <Description>NSIGII Heartfull Firmware Compositor — MMUKO-OS pre-boot constitutional layer</Description>
+    <Copyright>OBINexus Computing 2026</Copyright>
+  </PropertyGroup>
+
+  <!--
+    Native library search path for P/Invoke (libnsigii_firmware)
+    Resolved at runtime from build/lib/
+  -->
+  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+  </PropertyGroup>
+  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Main.cs" />
+    <Compile Include="NSIGII_HeartfullFirmware.cs" />
+    <Compile Include="NSIGII_HeartFeltFirmware.cs" />
+  </ItemGroup>
+
+  <!-- Copy native firmware library to output directory -->
+  <ItemGroup>
+    <None Update="../build/lib/nsigii_firmware.dll"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="Exists('../build/lib/nsigii_firmware.dll')" />
+    <None Update="../build/lib/libnsigii_firmware.so"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="Exists('../build/lib/libnsigii_firmware.so')" />
+  </ItemGroup>
+
+</Project>
